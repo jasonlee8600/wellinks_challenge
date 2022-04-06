@@ -3,7 +3,7 @@ import json
 import os
 
 # initialize array to store data
-rows = []
+answer = []
 
 # go into subdirectory with data files
 path = os.getcwd() + '/data'
@@ -24,7 +24,7 @@ with open('erp_users.csv', 'r') as file:
         address = row[4]
         list = [lname, fname, email, address]
         final = ", ".join(list)
-        rows.append(final)
+        answer.append(final)
 
 
 
@@ -60,12 +60,12 @@ for user in data:
     list3 = [lname, fname, email, address, city, state_zip]
     # combining all the elements with commas between
     final = ", ".join(list3)
-    rows.append(final)
+    answer.append(final)
 
 # sort the data alphabetically by last name
 # did not have time to include alphabetizing by first name if some people have same last name
-rows.sort()
+answer.sort()
 
 # print data
-for x in rows:
+for x in answer:
     print(x)
