@@ -1,3 +1,5 @@
+# UPDATED SOLUTION AFTER CODING REVIEW EXERCISE
+
 import csv
 import json
 import os
@@ -22,19 +24,20 @@ with open('erp_users.csv', 'r') as file:
         fname = row[3]
         email = row[0]
         address = row[4]
-        list = [lname, fname, email, address]
-        final = ", ".join(list)
-        answer.append(final)
+        final = [lname, fname, email, address]
+        output = ", ".join(final)
+        answer.append(output)
 
 
 
-with open('users.json', 'r') as file2:
-	json_load = json.load(file2)
+with open('users.json', 'r') as file:
 
-# get root out of way
+	json_load = json.load(file)
+
+    # get root out of way
 data = json_load['results']
 
-# query for each element needed
+    # query for each element needed
 for user in data:
     lname = user['name']['last']
     fname = user['name']['first']
@@ -43,27 +46,63 @@ for user in data:
     # cast street number (int) as string
     stnumber = str(user['location']['street']['number'])
     stname = user['location']['street']['name']
-    list1 = [stnumber, stname]
+    address = [stnumber, stname]
     # joining elements that don't need commas between them
-    address = " ".join(list1)
-    
+    new_address = " ".join(address)
+        
 
     city = user['location']['city']
 
     state = user['location']['state']
     # cast zip (int) as string
     zip = str(user['location']['postcode'])
-    list2 = [state, zip]
+    state_zip = [state, zip]
     # joining elements that don't need commas between them
-    state_zip = " ".join(list2)
+    new_state_zip = " ".join(state_zip)
 
-    list3 = [lname, fname, email, address, city, state_zip]
+    final = [lname, fname, email, new_address, city, new_state_zip]
     # combining all the elements with commas between
-    final = ", ".join(list3)
-    answer.append(final)
+    output = ", ".join(final)
+    answer.append(output)
+
+
+
+# third data file "more_data.csv"
+
+with open('more_data.csv', 'r') as file:
+
+    reader = csv.reader(file)
+
+    for row in reader:
+        # skip header example row
+        if row[0] == "name":
+            continue
+        # change name string element to exclude middle initial
+        name = row[0][(0):(-3)] # first and last name
+        email = row[2]
+        
+        address = row[3]
+        if (not(address[0].isdigit())):
+            index = 0
+            for char in address:
+                if not(char.isdigit()):
+                    index += 1
+                else:
+                    break
+            address = address[index:len(address)]
+
+        state = row[6]
+        zip = row[4]
+        state_zip = [state, zip]
+        # joining elements that don't need commas between them
+        new_state_zip = " ".join(state_zip)
+
+        final = [name, email, address, new_state_zip]
+        output = ", ".join(final)
+        answer.append(output)
+
 
 # sort the data alphabetically by last name
-# did not have time to include alphabetizing by first name if some people have same last name
 answer.sort()
 
 # print data
